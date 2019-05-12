@@ -1,0 +1,121 @@
+ <style>
+   .login-button { /* 按钮美化 */
+	width: 270px; /* 宽度 */
+	height: 40px; /* 高度 */
+	border-width: 0px; /* 边框宽度 */
+	border-radius: 3px; /* 边框半径 */
+	background: #1E90FF; /* 背景颜色 */
+	cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+	outline: none; /* 不显示轮廓线 */
+	font-family: Microsoft YaHei; /* 设置字体 */
+	color: white; /* 字体颜色 */
+	font-size: 17px; /* 字体大小 */
+}
+.login-button:hover { /* 鼠标移入按钮范围时改变颜色 */
+	background: #5599FF;
+}
+ .xiangxi{
+           margin-left:40%;
+           display:inline;
+           font-size:15px;
+        }
+        .a1{
+           display:inline;
+        }
+        .sousuo{
+           margin-top:1%;
+        }
+        .a2{
+           display:inline;
+           width:30%;
+           height:30px;
+           border-style:solid;
+           border-color:#FF3333;
+           margin-left:32%;
+        }
+        .a3{
+           background:#ff3333;
+           border-style:none;
+           width:7%;
+           height:35px;
+        }
+        .a4{
+           font-size:40px;
+        }
+        .main{
+           margin-left:20%;
+           margin-top:20px;
+           width:80%;
+        }
+        .tushu{
+           display:inline-block;
+           width:20%;
+           margin-top:5px;
+        }
+       .a{
+          display:block;
+          font-size:20px;
+       }
+       .tip{
+       color:red;
+       }
+.book{
+width:65px;
+}
+</style>
+{% load static %}
+<div width="100%" class="a1">
+    		<div class="a1">
+                <a href="{% url 'ob:index' %}"><img src="{% static 'ob/images/tubiao.png' %}"></a>
+    		</div>
+    		<div class="xiangxi" display="inline">
+    			<img src="{% static 'ob/images/gouwuche.gif' %}" width="50" align="middle">
+    			<a href="{% url 'ob:show_shopping_cart' %}">购物车</a>|
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'ob:show_shopping_records' %}">购物记录</a>|
+                    <a href="{% url 'ob:logout' %}">退出</a>
+                {% else %}
+                    <a href="{% url 'ob:login' %}">登录</a>|
+                    <a href="{% url 'ob:register' %}">新用户注册</a>
+                {% endif %}
+            </div>
+    	</div>
+        <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+ <p class="tip">{{tip}}</p>
+        <table width="598" border="1" align="center">
+  <tr>
+    <td width="170">商品名称</td>
+    <td width="65">缩略图</td>
+      <td width="65">价格</td>
+    <td width="83">数量</td>
+    <td width="74">详情</td>
+    <td width="172">操作</td>
+  </tr>
+{% for book in shopping_cart %}
+  <tr>
+    <td>{{book.bookname}}</td>
+   <td><img src="{% static book.imagename %}" class="book" alt=""></td>
+    <td>{{book.price}}</td>
+      <td>{{book.amount}}</td>
+      <td>{{book.introduction}}</td>
+    <td>
+        <form action="{% url 'ob:update_cart' %}" method="post">
+        {% csrf_token %}
+            <input type="text" name="book_id" hidden="hidden" value="{{book.book_id}}">
+            <input type="submit" name="method" value="删除">
+        </form>
+    </td>
+  </tr>
+{% endfor %}
+  <tr>
+    <td colspan="6" align="center" >总计：￥{{ request.session.sum }}</td>
+  </tr>
+</table>
+
+  <br>
+  <br>
+ {% if request.session.sum != 0 %}
+  <div align="center" >
+      <a href="{% url 'ob:settle_accounts' %}">购买</a>
+  </div>
+ {% endif %}

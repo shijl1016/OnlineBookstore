@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>购买界面</title>
+    <style>
+        .xiangxi{
+           margin-left:40%;
+           display:inline;
+           font-size:15px;
+        }
+        .a1{
+           display:inline;
+        }
+        .sousuo{
+           margin-top:1%;
+        }
+        .a2{
+           display:inline;
+           width:30%;
+           height:30px;
+           border-style:solid;
+           border-color:#FF3333;
+           margin-left:32%;
+        }
+        .a3{
+           background:#ff3333;
+           border-style:none;
+           width:7%;
+           height:35px;
+        }
+        .a4{
+           font-size:40px;
+        }
+        .main{
+           margin-left:20%;
+           margin-top:20px;
+           width:80%;
+        }
+        .tushu{
+           display:inline-block;
+           width:20%;
+           margin-top:5px;
+        }
+       .a{
+          display:block;
+          font-size:20px;
+       }
+    </style>
+</head>
+<body>
+   {% load static %}
+         <div width="100%" class="a1">
+    		<div class="a1">
+    			<a href="{% url 'ob:index' %}"><img  src="{% static 'ob/images/tubiao.png' %}"></a>
+    		</div>
+    		<div class="xiangxi" display="inline">
+    			<img src="{% static 'ob/images/gouwuche.gif' %}" width="50" align="middle">
+    			<a href="{% url 'ob:show_shopping_cart' %}">购物车</a>|
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'ob:show_shopping_records' %}">购物记录</a>|
+                    <a href="{% url 'ob:logout' %}">退出</a>
+                {% else %}
+                    <a href="{% url 'ob:login' %}">登录</a>|
+                    <a href="{% url 'ob:register' %}">新用户注册</a>
+                {% endif %}
+    		</div>
+    	</div>
+   <hr>
+ <div class="name" align="center">购买记录</div>
+<table border="1" align="center">
+  <tr>
+    <th  align="center">名称</th>
+    <th  align="center">数量</th>
+    <th  align="center">购买日期</th>
+  </tr>
+    {% for record in records %}
+   <tr>
+     <td  align="center">{{record.book.bookname}}</td>
+     <td  align="center">{{record.amount}}</td>
+     <td  align="center">{{record.purchasing_date}}</td>
+   </tr>
+    {% endfor %}
+    <!--<tr  align="center">-->
+        <!--<td colspan='2'>总计：{{ records.count }}</td>-->
+    <!--</tr>-->
+</table>
